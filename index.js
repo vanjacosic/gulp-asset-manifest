@@ -66,8 +66,13 @@ function gulpFilename(outputFile) {
         }
     });
 
+    // Reset variables
+    payload = {};
+    count = 1;
+
     // returning the file stream
     return stream;
+
 }
 
 // Exporting the plugin main function

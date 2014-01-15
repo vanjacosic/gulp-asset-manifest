@@ -6,7 +6,10 @@
     "homepage": "https://github.com/vanjacosic/gulp-filename",
     "repository": {
         "type": "git",
-        "url": "https://github.com/vanjacosic/gulp-filename"
+        "url": "https://github.com/vanjacosic/gulp-filename.git"
+    },
+    "bugs": {
+        "url" : "https://github.com/vanjacosic/gulp-filename/issues"
     },
     "author": {
         "name": "Vanja Cosic",

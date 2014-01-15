@@ -10,10 +10,10 @@ Works great with [gulp-rev](https://github.com/sindresorhus/gulp-rev) by Sindre 
 
 ## Install
 
-Install with npm
+Install with npm from GitHub
 
 ```
-npm install --save-dev https://github.com/vanjacosic/gulp-filename.git
+npm install --save-dev git+https://github.com/vanjacosic/gulp-filename.git
 ```
 
 
