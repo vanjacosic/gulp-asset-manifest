@@ -1,21 +1,20 @@
 // Requirements
-var through = require('through2');
+var map = require('map-stream');
 var gutil = require('gulp-util');
 var path = require('path');
 var fs = require('fs');
 
 // Variables
-var PLUGIN_NAME = 'gulp-filename';
-var payload = {};
-var count = 1;
+var fileList, count;
 
-function addToPayload(filename){
+// Helper function
+function addFilenameToFilelist(filename, outputFile) {
     // Add filename to the list of files
-    payload['file-' + count] = filename;
-    count++;
-}
+    fileList['file-' + count] = filename;
 
-function writePayloadToFile(outputFile) {
+    // Increase filecount
+    count++;
+
     // Set up filestream
     var wstream = fs.createWriteStream(outputFile);
 
@@ -24,56 +23,39 @@ function writePayloadToFile(outputFile) {
         console.log('Stream error: ' + err);
     });
 
-    // Write payload to file and close stream
-    wstream.write(JSON.stringify(payload));
+    // Write fileList to file and close stream
+    wstream.write(JSON.stringify(fileList));
     wstream.end();
 }
 
-// Plugin level function
-function gulpFilename(outputFile) {
+// Plugin function
+module.exports = function(options) {
+    // Prepare options
+    options = options || {};
+    options.outputfile = options.outputfile || 'assets.json';
 
-    if (!outputFile) {
-        outputFile = 'files.json';
-    }
-
-    // Creating a stream through which each file will pass
-    var stream = through.obj(function(file, enc, callback) {
-        if (file.isNull()) {
-            // Do nothing if no contents
-            this.push(file);
-            return callback();
-        }
-
-        if (file.isStream()) {
-            // Emit error if stream
-            this.emit('error', new gutil.PluginError(PLUGIN_NAME, 'Streams are not supported!'));
-            return callback();
-        }
-
-        if (file.isBuffer()) {
-            // Retrieve filename
-            var filename = path.basename(file.path);
-
-            // Add file to payload
-            addToPayload(filename);
-
-            // Output list as file
-            writePayloadToFile(outputFile);
-
-            // Return original file unaltered
-            this.push(file);
-            return callback();
-        }
-    });
-
-    // Reset variables
-    payload = {};
+    // Reset variables before map
+    fileList = {};
     count = 1;
 
-    // returning the file stream
-    return stream;
+    return map(function(file, callback) {
+        // Let empty files pass
+        if (file.isNull()) { return callback(null, file); }
 
-}
+        // Emit error for streams
+        if (file.isStream()) { return callback(new gutil.PluginError('gulp-filename', 'Streams are not supported!')); }
 
-// Exporting the plugin main function
-module.exports = gulpFilename;
+        // Retrieve filename
+        var filename = path.basename(file.path);
+
+        if (options.log) {
+            // Log to console
+            gutil.log('Filename:', gutil.colors.green(filename));
+        }
+
+        // Add file to fileList
+        addFilenameToFilelist(filename, options.outputfile);
+
+        callback(null, file);
+    });
+};
