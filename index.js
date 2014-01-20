@@ -4,57 +4,111 @@ var gutil = require('gulp-util');
 var path = require('path');
 var fs = require('fs');
 
-// Variables
-var fileList, count;
-
 // Helper function
-function addFilenameToFilelist(filename, outputFile) {
-    // Add filename to the list of files
-    fileList['file-' + count] = filename;
-
-    // Increase filecount
-    count++;
-
-    // Set up filestream
-    var wstream = fs.createWriteStream(outputFile);
-
-    // Handle errors
-    wstream.on('error', function(err) {
-        console.log('Stream error: ' + err);
-    });
-
-    // Write fileList to file and close stream
-    wstream.write(JSON.stringify(fileList));
-    wstream.end();
+function errorMessage(message){
+    throw new gutil.PluginError('gulp-filename', message);
 }
+
+function checkAssetFile(filename) {
+    // Check if asset file exists
+    return fs.existsSync(filename, function (exists) {
+        return exists;
+    });
+}
+
+function readAssetFile(filename) {
+    // Read data from asset file
+    return fs.readFileSync(filename, 'utf8', function(err, data) {
+        if (err) {
+            errorMessage('Error reading asset file.');
+        }
+        return data;
+    });
+}
+
+function writeAssetsFile(data, filename) {
+    // Write data to asset file
+    fs.writeFileSync(filename, JSON.stringify(data));
+}
+
+function resetAssetFile(bundlename, filename) {
+    // Check if asset file exists
+    var doesFileExist = checkAssetFile(filename);
+
+    if(doesFileExist){
+        // Read asset file contents
+        var contents = readAssetFile(filename);
+
+        // Copy data into file list
+        fileList = JSON.parse(contents);
+
+        // Reset or create array for each bundle
+        fileList[bundlename] = [];
+    }
+    else{
+        // Create empty file list
+        fileList = {};
+    }
+
+    // Write file list to asset file
+    writeAssetsFile(fileList, filename);
+}
+
 
 // Plugin function
 module.exports = function(options) {
+    // Reset file list
+    var fileList;
+
     // Prepare options
     options = options || {};
-    options.outputfile = options.outputfile || 'assets.json';
+    options.assetFile = options.assetFile || 'assets.json';
 
-    // Reset variables before map
-    fileList = {};
-    count = 1;
+    if(!options.bundleName){
+        errorMessage('A bundle name is required. Please refer to the docs.');
+    }
 
+    if (options.log) {
+        gutil.log('Preparing bundle:', gutil.colors.green(options.bundleName));
+    }
+
+    // Reset asset file
+    resetAssetFile(options.bundleName, options.assetFile);
+
+    // Process files
     return map(function(file, callback) {
         // Let empty files pass
-        if (file.isNull()) { return callback(null, file); }
+        if (file.isNull()) {
+            return callback(null, file);
+        }
 
         // Emit error for streams
-        if (file.isStream()) { return callback(new gutil.PluginError('gulp-filename', 'Streams are not supported!')); }
+        if (file.isStream()) {
+            errorMessage('Streams are not supported');
+        }
+
+        // Read asset file contents
+        var contents = readAssetFile(options.assetFile);
+
+        // Copy data into file list
+        fileList = JSON.parse(contents);
 
         // Retrieve filename
         var filename = path.basename(file.path);
 
-        if (options.log) {
-            // Log to console
-            gutil.log('Filename:', gutil.colors.green(filename));
+        // Add filename to fileList
+        if (!fileList[options.bundleName]){
+            fileList[options.bundleName] = [];
         }
 
-        // Add file to fileList
-        addFilenameToFilelist(filename, options.outputfile);
+        fileList[options.bundleName].push(filename);
+
+        // Write list to asset file
+        writeAssetsFile(fileList, options.assetFile);
+
+        if (options.log) {
+            gutil.log('Wrote filename:', gutil.colors.green(filename));
+        }
 
         callback(null, file);
     });

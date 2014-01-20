@@ -26,7 +26,7 @@ var filename = require('gulp-filename');
 // Simple usage
 gulp.task('default', function () {
 	gulp.src('src/*.js')
-		.pipe(filename())
+		.pipe(filename({bundleName: 'app_scripts'}))
 		.pipe(gulp.dest('dist'));
 });
 
@@ -34,7 +34,7 @@ gulp.task('default', function () {
 // Usage with options
 gulp.task('default', function () {
 	gulp.src('src/*.js')
-		.pipe(filename({ outputfile: "myAssets.json", log: true }))
+		.pipe(filename({ bundleName: 'app_scripts', assetFile: 'assets/asset_manifest.json', log: true}))
 		.pipe(gulp.dest('dist'));
 });
 
@@ -45,7 +45,7 @@ var rev = require('gulp-rev'); // Optional
 gulp.task('default', function () {
 	gulp.src('src/*.js')
 		.pipe(rev()) // Optional
-		.pipe(filename({ outputfile: "myAssets.json"}))
+		.pipe(filename({bundleName: 'app_scripts'}))
 		.pipe(gulp.dest('dist'));
 });
 ```
@@ -54,15 +54,23 @@ gulp.task('default', function () {
 
 ### filename(options)
 
-#### options.outputfile
+#### options.bundleName
 Type: `String`
-Default: `files.json`
+Required: Yes
 
-Set the filename to output to.
+Path of the asset file the plugin reads from and writes to.
+
+#### options.assetFile
+Type: `String`
+Default: `assets.json`
+Required: No
+
+Path of the asset file the plugin reads from and writes to.
 
 #### options.log
 Type: `Boolean`
 Default: `false`
+Required: No
 
 Will output filenames to console if true.
 
