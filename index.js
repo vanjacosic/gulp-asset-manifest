@@ -64,6 +64,8 @@ module.exports = function(options) {
     options = options || {};
     options.assetFile = options.assetFile || 'assets.json';
 
+    var pathPrepend = options.pathPrepend || '';
+
     if(!options.bundleName){
         errorMessage('A bundle name is required. Please refer to the docs.');
     }
@@ -101,7 +103,7 @@ module.exports = function(options) {
             fileList[options.bundleName] = [];
         }
 
-        fileList[options.bundleName].push(filename);
+        fileList[options.bundleName].push(pathPrepend + filename);
 
         // Write list to asset file
         writeAssetsFile(fileList, options.assetFile);

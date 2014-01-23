@@ -34,7 +34,7 @@ gulp.task('default', function () {
 // Usage with options
 gulp.task('default', function () {
 	gulp.src('src/*.js')
-		.pipe(filename({ bundleName: 'app_scripts', assetFile: 'assets/asset_manifest.json', log: true}))
+		.pipe(filename({ bundleName: 'app_scripts', pathPrepend: 'build/', assetFile: 'assets/asset_manifest.json', log: true}))
 		.pipe(gulp.dest('dist'));
 });
 
@@ -66,6 +66,13 @@ Default: `assets.json`
 Required: No
 
 Path of the asset file the plugin reads from and writes to.
+
+#### options.pathPrepend
+Type: `String`
+Default: ``
+Required: No
+
+Prepend a path to the filename. Eg. 'assets/build/'
 
 #### options.log
 Type: `Boolean`
