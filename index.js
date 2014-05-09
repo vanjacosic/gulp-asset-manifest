@@ -98,7 +98,7 @@ module.exports = function(options) {
         // Retrieve filename
 		var filename;
         if (options.includeRelativePath) {
-            filename = '/' + path.relative(process.cwd(), file.path);
+            filename =  path.relative(process.cwd(), file.path);
         }
         else { filename = path.basename(file.path); }
         
