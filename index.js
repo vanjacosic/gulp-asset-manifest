@@ -96,7 +96,12 @@ module.exports = function(options) {
         fileList = JSON.parse(contents);
 
         // Retrieve filename
-        var filename = path.basename(file.path);
+		var filename;
+        if (options.includeRelativePath) {
+            filename = '/' + path.relative(process.cwd(), file.path);
+        }
+        else { filename = path.basename(file.path); }
+        
 
         // Add filename to fileList
         if (!fileList[options.bundleName]){
