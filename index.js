@@ -100,7 +100,9 @@ module.exports = function(options) {
         if (options.includeRelativePath) {
             filename =  path.relative(process.cwd(), file.path);
         }
-        else { filename = path.basename(file.path); }
+        else { 
+            filename = path.basename(file.path); 
+        }
         
 
         // Add filename to fileList
