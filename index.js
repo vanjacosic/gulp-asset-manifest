@@ -96,7 +96,7 @@ module.exports = function(options) {
         fileList = JSON.parse(contents);
 
         // Retrieve filename
-		var filename;
+	var filename;
         if (options.includeRelativePath) {
             filename =  path.relative(process.cwd(), file.path);
         }
