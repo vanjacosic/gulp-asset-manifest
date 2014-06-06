@@ -81,5 +81,12 @@ Required: No
 
 Will output filenames to console if true.
 
+#### options.includeRelativePath
+Type: `Boolean`
+Default: `false`
+Required: No
+
+Will include the relative path of the file(s)
+
 ## License
 MIT © Vanja Cosic
