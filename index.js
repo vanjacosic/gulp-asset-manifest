@@ -6,7 +6,7 @@ var fs = require('fs');
 
 // Helper function
 function errorMessage(message){
-    throw new gutil.PluginError('gulp-filename', message);
+    throw new gutil.PluginError('gulp-asset-manifest', message);
 }
 
 function checkAssetFile(filename) {
@@ -57,12 +57,13 @@ function resetAssetFile(bundlename, filename) {
 
 // Plugin function
 module.exports = function(options) {
+
     // Reset file list
     var fileList;
 
     // Prepare options
     options = options || {};
-    options.assetFile = options.assetFile || 'assets.json';
+    options.assetFile = options.assetFile || 'asset_manifest.json';
 
     var pathPrepend = options.pathPrepend || '';
 
@@ -79,6 +80,7 @@ module.exports = function(options) {
 
     // Process files
     return map(function(file, callback) {
+
         // Let empty files pass
         if (file.isNull()) {
             return callback(null, file);
@@ -95,15 +97,15 @@ module.exports = function(options) {
         // Copy data into file list
         fileList = JSON.parse(contents);
 
+        var filename;
+
         // Retrieve filename
-	var filename;
         if (options.includeRelativePath) {
             filename =  path.relative(process.cwd(), file.path);
         }
-        else { 
-            filename = path.basename(file.path); 
+        else {
+            filename = path.basename(file.path);
         }
-        
 
         // Add filename to fileList
         if (!fileList[options.bundleName]){
@@ -116,7 +118,7 @@ module.exports = function(options) {
         writeAssetsFile(fileList, options.assetFile);
 
         if (options.log) {
-            gutil.log('Wrote filename:', gutil.colors.green(filename));
+            gutil.log('Added', gutil.colors.green(filename), 'to asset manifest.');
         }
 
         callback(null, file);
