@@ -9,35 +9,35 @@ function errorMessage(message){
     throw new gutil.PluginError('gulp-asset-manifest', message);
 }
 
-function checkAssetFile(filename) {
-    // Check if asset file exists
+function checkManifestFile(filename) {
+    // Check if manifest file exists
     return fs.existsSync(filename, function (exists) {
         return exists;
     });
 }
 
-function readAssetFile(filename) {
-    // Read data from asset file
+function readManifestFile(filename) {
+    // Read data from manifest file
     return fs.readFileSync(filename, 'utf8', function(err, data) {
         if (err) {
-            errorMessage('Error reading asset file.');
+            errorMessage('Error reading manifest file.');
         }
         return data;
     });
 }
 
-function writeAssetsFile(data, filename) {
-    // Write data to asset file
+function writeManifestFile(data, filename) {
+    // Write data to manifest file
     fs.writeFileSync(filename, JSON.stringify(data));
 }
 
-function resetAssetFile(bundlename, filename) {
-    // Check if asset file exists
-    var doesFileExist = checkAssetFile(filename);
+function resetManifestFile(bundlename, filename) {
+    // Check if manifest file exists
+    var doesFileExist = checkManifestFile(filename);
 
     if(doesFileExist){
-        // Read asset file contents
-        var contents = readAssetFile(filename);
+        // Read manifest file contents
+        var contents = readManifestFile(filename);
 
         // Copy data into file list
         fileList = JSON.parse(contents);
@@ -50,8 +50,8 @@ function resetAssetFile(bundlename, filename) {
         fileList = {};
     }
 
-    // Write file list to asset file
-    writeAssetsFile(fileList, filename);
+    // Write file list to manifest file
+    writeManifestFile(fileList, filename);
 }
 
 
@@ -63,7 +63,7 @@ module.exports = function(options) {
 
     // Prepare options
     options = options || {};
-    options.assetFile = options.assetFile || 'asset_manifest.json';
+    options.manifestFile = options.manifestFile || 'asset_manifest.json';
 
     var pathPrepend = options.pathPrepend || '';
 
@@ -76,7 +76,7 @@ module.exports = function(options) {
     }
 
     // Reset asset file
-    resetAssetFile(options.bundleName, options.assetFile);
+    resetManifestFile(options.bundleName, options.manifestFile);
 
     // Process files
     return map(function(file, callback) {
@@ -92,7 +92,7 @@ module.exports = function(options) {
         }
 
         // Read asset file contents
-        var contents = readAssetFile(options.assetFile);
+        var contents = readManifestFile(options.manifestFile);
 
         // Copy data into file list
         fileList = JSON.parse(contents);
@@ -115,7 +115,7 @@ module.exports = function(options) {
         fileList[options.bundleName].push(pathPrepend + filename);
 
         // Write list to asset file
-        writeAssetsFile(fileList, options.assetFile);
+        writeManifestFile(fileList, options.manifestFile);
 
         if (options.log) {
             gutil.log('Added', gutil.colors.green(filename), 'to asset manifest.');

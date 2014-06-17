@@ -1,19 +1,25 @@
-# [gulp](https://github.com/wearefractal/gulp)-filename
+# [gulp](https://github.com/wearefractal/gulp)-asset-manifest
 
-> Gulp plugin for writing filenames to a JSON file.
+> gulp plugin for adding generated assets to a manifest file
 
-We needed to make hashed asset filenames available in a common format.
-Can easily be modified to suit your own purposes.
+We needed to make hashed asset filenames available in a common format that a webserver (Django) could load into the templates.
+This plugin can easily be modified to suit your own purposes.
 
-Works great with [gulp-rev](https://github.com/sindresorhus/gulp-rev) by Sindre Sorhus.
-`gulp-rev` adds hashes to the filename, `gulp-filename` lists the filenames in a JSON file.
+It works great with [gulp-rev](https://github.com/sindresorhus/gulp-rev) by Sindre Sorhus.
+`gulp-rev` adds hashes to the filename, `gulp-asset-manifest` adds the hashed filenames to the manifest.
+
+## How it works
+
+The plugin takes generated or processed asset files (CSS, JS, whatever) and adds them to a JSON manifest file.
+It separates the files by bundles, so you can have one for CSS, one for JS and your other needs.
+These bundles can then be read from the manifest file into your templates.
 
 ## Install
 
 Install with npm from GitHub
 
-```
-npm install --save-dev git+https://github.com/vanjacosic/gulp-filename.git
+```bash
+npm install --save-dev git+https://github.com/vanjacosic/gulp-asset-manifest.git
 ```
 
 
@@ -21,12 +27,12 @@ npm install --save-dev git+https://github.com/vanjacosic/gulp-filename.git
 
 ```js
 var gulp = require('gulp');
-var filename = require('gulp-filename');
+var assetManifest = require('gulp-asset-manifest');
 
 // Simple usage
 gulp.task('default', function () {
 	gulp.src('src/*.js')
-		.pipe(filename({bundleName: 'app_scripts'}))
+		.pipe(assetManifest({bundleName: 'app_scripts'}))
 		.pipe(gulp.dest('dist'));
 });
 
@@ -34,7 +40,7 @@ gulp.task('default', function () {
 // Usage with options
 gulp.task('default', function () {
 	gulp.src('src/*.js')
-		.pipe(filename({ bundleName: 'app_scripts', pathPrepend: 'build/', assetFile: 'assets/asset_manifest.json', log: true}))
+		.pipe(assetManifest({ bundleName: 'app_scripts', pathPrepend: 'build/', manifestFile: 'assets/asset_manifest.json', log: true}))
 		.pipe(gulp.dest('dist'));
 });
 
@@ -45,48 +51,50 @@ var rev = require('gulp-rev'); // Optional
 gulp.task('default', function () {
 	gulp.src('src/*.js')
 		.pipe(rev()) // Optional
-		.pipe(filename({bundleName: 'app_scripts'}))
+		.pipe(assetManifest({bundleName: 'app_scripts', log: true}))
 		.pipe(gulp.dest('dist'));
 });
 ```
 
 ## API
 
-### filename(options)
+### assetManifestoptions)
 
 #### options.bundleName
 Type: `String`
 Required: Yes
 
-Path of the asset file the plugin reads from and writes to.
+Name of the bundle for this task. 
+E.g. if the tasks handles JS libraries, the bundle name could be 'js_libs'.
+If the gulp task processes all Sass files, it could be 'main_css'.
 
-#### options.assetFile
+#### options.manifestFile
 Type: `String`
-Default: `assets.json`
+Default: `asset_manifest.json`
 Required: No
 
-Path of the asset file the plugin reads from and writes to.
+Path of the manifest file which plugin reads from and writes to.
 
 #### options.pathPrepend
 Type: `String`
 Default: ``
 Required: No
 
-Prepend a path to the filename. Eg. 'assets/build/'
-
-#### options.log
-Type: `Boolean`
-Default: `false`
-Required: No
-
-Will output filenames to console if true.
+Prepend a path to the filename. Eg. 'assets/build/'.
 
 #### options.includeRelativePath
 Type: `Boolean`
 Default: `false`
 Required: No
 
-Will include the relative path of the file(s)
+Will include the relative path of the file(s).
+
+#### options.log
+Type: `Boolean`
+Default: `false`
+Required: No
+
+If true, the plugin will output filenames to the console.
 
 ## License
 MIT © Vanja Cosic
