@@ -1,15 +1,15 @@
 {
-    "name": "gulp-filename",
-    "version": "0.0.1",
+    "name": "gulp-asset-manifest",
+    "version": "0.0.3",
     "description": "Gulp plugin for writing filenames to a JSON file.",
     "license": "MIT",
-    "homepage": "https://github.com/vanjacosic/gulp-filename",
+    "homepage": "https://github.com/vanjacosic/gulp-asset-manifest",
     "repository": {
         "type": "git",
-        "url": "https://github.com/vanjacosic/gulp-filename.git"
+        "url": "https://github.com/vanjacosic/gulp-asset-manifest.git"
     },
     "bugs": {
-        "url" : "https://github.com/vanjacosic/gulp-filename/issues"
+        "url" : "https://github.com/vanjacosic/gulp-asset-manifest/issues"
     },
     "author": {
         "name": "Vanja Cosic",
@@ -19,6 +19,9 @@
     "keywords": [
         "gulp",
         "gulpplugin",
+        "asset-manifest",
+        "assets",
+        "manifest",
         "filename",
         "files",
         "json"
