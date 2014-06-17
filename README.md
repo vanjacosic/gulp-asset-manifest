@@ -16,11 +16,13 @@ These bundles can then be read from the manifest file into your templates.
 
 ## Install
 
-Install with npm from GitHub
+Install with npm
 
 ```bash
-npm install --save-dev git+https://github.com/vanjacosic/gulp-asset-manifest.git
+npm install gulp-asset-manifest
 ```
+
+See examples below on how to add it to your gulpfile.
 
 
 ## Example
@@ -58,7 +60,7 @@ gulp.task('default', function () {
 
 ## API
 
-### assetManifestoptions)
+### assetManifest(options)
 
 #### options.bundleName
 Type: `String`

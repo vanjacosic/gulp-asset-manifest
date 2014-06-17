@@ -20,8 +20,10 @@
         "gulp",
         "gulpplugin",
         "asset-manifest",
+        "asset",
         "assets",
         "manifest",
+        "django",
         "filename",
         "files",
         "json"
