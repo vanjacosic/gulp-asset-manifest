@@ -1,7 +1,7 @@
 {
     "name": "gulp-asset-manifest",
-    "version": "0.0.3",
-    "description": "Gulp plugin for writing filenames to a JSON file.",
+    "version": "0.0.4",
+    "description": "gulp plugin for adding generated assets to a manifest file",
     "license": "MIT",
     "homepage": "https://github.com/vanjacosic/gulp-asset-manifest",
     "repository": {
@@ -19,14 +19,11 @@
     "keywords": [
         "gulp",
         "gulpplugin",
-        "asset-manifest",
-        "asset",
         "assets",
         "manifest",
         "django",
         "filename",
-        "files",
-        "json"
+        "files"
     ],
     "readmeFilename": "README.md",
     "files": [
