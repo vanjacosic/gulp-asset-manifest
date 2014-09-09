@@ -91,6 +91,13 @@ Required: No
 
 Will include the relative path of the file(s).
 
+#### options.pathSeparator
+Type: `String`
+Default: <The default path separator for the current environment>
+Required: No
+
+Override the environment's default path separator. Can be used to convert MSDOS paths (`\`) to *nix paths ('/').
+
 #### options.log
 Type: `Boolean`
 Default: `false`
