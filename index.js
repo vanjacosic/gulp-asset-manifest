@@ -40,7 +40,7 @@ function resetManifestFile(bundlename, filename) {
         var contents = readManifestFile(filename);
 
         // Copy data into file list
-        fileList = JSON.parse(contents);
+        fileList = contents ? JSON.parse(contents) : {};
 
         // Reset or create array for each bundle
         fileList[bundlename] = [];
@@ -95,7 +95,7 @@ module.exports = function(options) {
         var contents = readManifestFile(options.manifestFile);
 
         // Copy data into file list
-        fileList = JSON.parse(contents);
+        fileList = contents ? JSON.parse(contents) : {};
 
         var filename;
 
