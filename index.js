@@ -107,6 +107,10 @@ module.exports = function(options) {
             filename = path.basename(file.path);
         }
 
+        if(options.pathSeparator && options.pathSeparator !== path.sep) {
+            filename = filename.split(path.sep).join(options.pathSeparator);
+        }
+
         // Add filename to fileList
         if (!fileList[options.bundleName]){
             fileList[options.bundleName] = [];
