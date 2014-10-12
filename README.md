@@ -16,38 +16,37 @@ These bundles can then be read from the manifest file into your templates.
 
 ## Install
 
-Install with npm
+Install with npm:
 
 ```bash
-npm install gulp-asset-manifest
+npm install gulp-asset-manifest --save
 ```
 
 See examples below on how to add it to your gulpfile.
 
 
-## Example
+## Examples
+
+### Simple usage
 
 ```js
 var gulp = require('gulp');
 var assetManifest = require('gulp-asset-manifest');
 
-// Simple usage
 gulp.task('default', function () {
 	gulp.src('src/*.js')
 		.pipe(assetManifest({bundleName: 'app_scripts'}))
 		.pipe(gulp.dest('dist'));
 });
+```
 
+### Default usage (with gulp-rev)
 
-// Usage with options
-gulp.task('default', function () {
-	gulp.src('src/*.js')
-		.pipe(assetManifest({ bundleName: 'app_scripts', pathPrepend: 'build/', manifestFile: 'assets/asset_manifest.json', log: true}))
-		.pipe(gulp.dest('dist'));
-});
+The use of gulp-rev is completely optional, but recommended for cache-busting etc.
 
-
-// Default usage (with gulp-rev)
+```js
+var gulp = require('gulp');
+var assetManifest = require('gulp-asset-manifest');
 var rev = require('gulp-rev'); // Optional
 
 gulp.task('default', function () {
@@ -56,6 +55,30 @@ gulp.task('default', function () {
 		.pipe(assetManifest({bundleName: 'app_scripts', log: true}))
 		.pipe(gulp.dest('dist'));
 });
+```
+
+### Usage with multiple bundles
+
+To have multiple bundles in the same manifest, add different `bundleName` parameters to the tasks.
+
+```js
+var gulp = require('gulp');
+var assetManifest = require('gulp-asset-manifest');
+
+gulp.task('scripts', function () {
+	gulp.src('src/*.js')
+		.pipe(uglify())
+		.pipe(assetManifest({bundleName: 'app_scripts'}))
+		.pipe(gulp.dest('dist'));
+});
+
+gulp.task('styles', function () {
+	gulp.src('src/scss/app.scss')
+		.pipe(sass())
+		.pipe(assetManifest({bundleName: 'app_styles'}))
+		.pipe(gulp.dest('dist'));
+});
+
 ```
 
 ## API
