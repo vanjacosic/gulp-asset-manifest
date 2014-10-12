@@ -79,7 +79,7 @@ Path of the manifest file which plugin reads from and writes to.
 
 #### options.pathPrepend
 Type: `String`
-Default: ``
+Default: None
 Required: No
 
 Prepend a path to the filename. Eg. 'assets/build/'.
@@ -93,7 +93,7 @@ Will include the relative path of the file(s).
 
 #### options.pathSeparator
 Type: `String`
-Default: <The default path separator for the current environment>
+Default: *The default path separator for the current environment*
 Required: No
 
 Override the environment's default path separator. Can be used to convert MSDOS paths (`\`) to *nix paths ('/').
