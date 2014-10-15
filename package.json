@@ -1,6 +1,6 @@
 {
     "name": "gulp-asset-manifest",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "gulp plugin for adding generated assets to a manifest file",
     "license": "MIT",
     "homepage": "https://github.com/vanjacosic/gulp-asset-manifest",
