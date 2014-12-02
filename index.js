@@ -11,19 +11,17 @@ function errorMessage(message){
 
 function checkManifestFile(filename) {
     // Check if manifest file exists
-    return fs.existsSync(filename, function (exists) {
-        return exists;
-    });
+    return fs.existsSync(filename);
 }
 
 function readManifestFile(filename) {
     // Read data from manifest file
-    return fs.readFileSync(filename, 'utf8', function(err, data) {
-        if (err) {
-            errorMessage('Error reading manifest file.');
-        }
-        return data;
-    });
+    try {
+        return fs.readFileSync(filename, 'utf8');
+    }
+    catch (e) {
+        errorMessage('Error reading manifest file.');
+    }
 }
 
 function writeManifestFile(data, filename) {
@@ -34,20 +32,18 @@ function writeManifestFile(data, filename) {
 function resetManifestFile(bundlename, filename) {
     // Check if manifest file exists
     var doesFileExist = checkManifestFile(filename);
+    var fileList = {};
 
     if(doesFileExist){
         // Read manifest file contents
         var contents = readManifestFile(filename);
 
         // Copy data into file list
-        fileList = contents ? JSON.parse(contents) : {};
-
+        if (contents) {
+            fileList = JSON.parse(contents);
+        }
         // Reset or create array for each bundle
         fileList[bundlename] = [];
-    }
-    else{
-        // Create empty file list
-        fileList = {};
     }
 
     // Write file list to manifest file
