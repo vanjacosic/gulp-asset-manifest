@@ -81,6 +81,12 @@ gulp.task('styles', function () {
 
 ```
 
+### Usage with Django
+
+We haven't gotten around to open sourcing our implementation of the Django manifest loader.
+
+But [@Xowap](https://github.com/Xowap) has created his own version which can be found here: https://gist.github.com/Xowap/f01dad68418dbb8ab110
+
 ## API
 
 ### assetManifest(options)
